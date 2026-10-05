@@ -28,6 +28,8 @@ DEFAULT_TASK = (
     "Implement login, logout, token refresh, and role-based access control."
 )
 
+load_dotenv()
+
 # LLM calls go through LiteLLM (https://docs.litellm.ai) — provider-agnostic.
 # Set LLM_API_KEY and (optionally) LLM_MODEL as "<provider>/<model>" in .env.
 # Default is Groq's free tier. Get a key at https://console.groq.com/keys
@@ -88,7 +90,6 @@ def compare(naive_result: dict, sw_result: dict) -> None:
 
 
 def main() -> None:
-    load_dotenv()
 
     parser = argparse.ArgumentParser(
         description="statewave-multi-agent-shared-context demo",
