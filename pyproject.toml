@@ -12,10 +12,11 @@ license = { text = "Apache-2.0" }
 dependencies = [
     "statewave>=0.8.0",
     "litellm>=1.83.7",
+    "rich>=13.7.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/smaramwbc/statewave-multi-agent-shared-context"
 
 [tool.setuptools.packages.find]
-include = ["statewave_agents*"]
+include = ["statewave_agents*", "core*"]

@@ -2,9 +2,16 @@
 statewave_agents — reusable shared-context coordination for multi-agent LLM systems.
 
     from statewave_agents import Agent, SharedContext
+    from core.llm import LLMClient
 
     ctx = SharedContext(subject_id="run-123")
-    agent = MyAgent(ctx, name="Planner")
+    llm = LLMClient()
+
+    class MyAgent(Agent):
+        def act(self, task, context):
+            ...
+
+    agent = MyAgent(llm, ctx)
 """
 
 from statewave_agents.context import SharedContext, Decision, ContextBundle
