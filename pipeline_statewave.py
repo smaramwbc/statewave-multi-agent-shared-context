@@ -62,6 +62,11 @@ def run(task: str, llm_client: LLMClient, sw_client: StatewaveClient, model: str
             "because the shared context contained the Planner's deprecation decision."
         )
 
+    # Check if Coder rebuilt any deprecated modules despite shared context
+    deprecated = {d.split("—")[0].strip().lower() for d in planner_result["decisions"]["deprecate"]}
+    built = {m.lower() for m in coder_result["implementing"]}
+    collision_candidates = deprecated & built
+
     # ------------------------------------------------------------------
     # Step 3: Reviewer reads the full shared context — both decisions in one place
     # ------------------------------------------------------------------
@@ -101,5 +106,6 @@ def run(task: str, llm_client: LLMClient, sw_client: StatewaveClient, model: str
         "planner": planner_result,
         "coder": coder_result,
         "reviewer": reviewer_result,
+        "deprecated_rebuilt": len(collision_candidates),
         "timing": {"plan": t_plan, "code": t_code, "review": t_review, "total": total},
     }

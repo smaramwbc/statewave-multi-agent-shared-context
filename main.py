@@ -72,7 +72,7 @@ def compare(naive_result: dict, sw_result: dict) -> None:
 
     rows = [
         ("Conflict detected",    "YES (after the fact)" if naive_conflict else "NO",   "NO — prevented before it happened" if not sw_conflict else "YES"),
-        ("Deprecated modules rebuilt", str(len(naive_result["coder"]["implementing"])), str(len(sw_result["coder"]["implementing"]) - sw_skipped if sw_skipped else "0")),
+        ("Deprecated modules rebuilt", str(naive_result.get("deprecated_rebuilt", 0)), str(sw_result.get("deprecated_rebuilt", 0))),
         ("Modules skipped (saved)",    str(naive_skipped),                             str(sw_skipped)),
         ("Total compute time",  f"{naive_timing:.1f}s",                                f"{sw_timing:.1f}s"),
         ("Audit trail",         "None",                                                 f"python timeline_inspector.py --run {sw_result['run_id']}"),

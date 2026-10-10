@@ -96,5 +96,6 @@ def run(task: str, llm_client: LLMClient, model: str = "groq/llama-3.3-70b-versa
         "planner": planner_result,
         "coder": coder_result,
         "reviewer": reviewer_result,
+        "deprecated_rebuilt": len(collision_candidates),
         "timing": {"plan": t_plan, "code": t_code, "review": t_review, "total": total},
     }
