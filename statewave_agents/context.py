@@ -99,13 +99,20 @@ class SharedContext:
         if self._auto_compile:
             self._client.compile(self.subject_id)
 
-    def before_acting(self, caller_id: str, task: str, top_k: int = 5) -> ContextBundle:
+    def before_acting(
+        self,
+        caller_id: str,
+        task: str,
+        top_k: int = 5,
+        caller_type: str = "agent",
+    ) -> ContextBundle:
         """Retrieve everything relevant to `task` that other agents have already decided."""
         response = self._client.get_context(
             subject_id=self.subject_id,
             caller_id=caller_id,
             task=task,
             top_k=top_k,
+            caller_type=caller_type,
         )
         return ContextBundle(
             assembled_context=response.get("assembled_context", ""),

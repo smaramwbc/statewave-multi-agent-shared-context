@@ -52,6 +52,7 @@ Respond with:
 class ReviewerAgent(Agent):
     name = "Reviewer"
     NAME = "Reviewer"  # kept for callers that still read the old constant
+    caller_type = "reviewer"
 
     def __init__(self, llm_client: LLMClient, model: str = "groq/llama-3.3-70b-versatile"):
         self._llm = llm_client

@@ -43,6 +43,7 @@ If a module appears in the DEPRECATE decisions, explicitly SKIP it and say why.
 class CoderAgent(Agent):
     name = "Coder"
     NAME = "Coder"  # kept for callers that still read the old constant
+    caller_type = "coder"
 
     def __init__(self, llm_client: LLMClient, model: str = "groq/llama-3.3-70b-versatile"):
         self._llm = llm_client

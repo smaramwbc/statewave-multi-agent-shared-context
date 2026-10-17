@@ -31,6 +31,7 @@ Be specific and concise. This output will be read by a Coder agent."""
 class PlannerAgent(Agent):
     name = "Planner"
     NAME = "Planner"  # kept for callers that still read the old constant
+    caller_type = "planner"
 
     def __init__(self, llm_client: LLMClient, model: str = "groq/llama-3.3-70b-versatile"):
         self._llm = llm_client
