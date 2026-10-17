@@ -25,6 +25,7 @@ class Agent:
     """
 
     name: str = "Agent"
+    caller_type: str = "agent"
 
     def __init__(self, llm: LLMClient, context: SharedContext, model: str = "groq/llama-3.3-70b-versatile"):
         self.llm = llm
@@ -33,7 +34,9 @@ class Agent:
 
     def run(self, task: str, top_k: int = 5) -> dict:
         """Read shared context, then act. This is the entrypoint most callers use."""
-        bundle = self.context.before_acting(self.name, task, top_k=top_k)
+        bundle = self.context.before_acting(
+            self.name, task, top_k=top_k, caller_type=self.caller_type
+        )
         result = self.act(task, bundle)
         self.publish_decisions(result)
         return result

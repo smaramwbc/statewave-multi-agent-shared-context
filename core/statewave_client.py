@@ -52,12 +52,19 @@ class StatewaveClient:
         caller_id: str,
         task: str,
         top_k: int = 5,
+        caller_type: str = "agent",
     ) -> dict[str, Any]:
-        """Retrieve ranked memories relevant to a task for a given caller."""
+        """Retrieve ranked memories relevant to a task for a given caller.
+
+        Sends the caller identity (caller_id and caller_type) so the service
+        can apply per-role policy. A tenant that sets require_caller_identity
+        rejects a request with no identity.
+        """
         bundle = self._sdk.get_context(
             subject_id=subject_id,
             task=task,
             caller_id=caller_id,
+            caller_type=caller_type,
         )
         return bundle.model_dump(mode="json")
 
