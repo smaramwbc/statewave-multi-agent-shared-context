@@ -38,7 +38,7 @@ class ContextBundle:
         return bool(self.memories)
 
     def memories_of_kind(self, kind: str) -> list[dict[str, Any]]:
-        return [m for m in self.memories if m.get("type") == kind]
+        return [m for m in self.memories if m.get("kind") == kind]
 
 
 class SharedContext:
@@ -109,7 +109,7 @@ class SharedContext:
         )
         return ContextBundle(
             assembled_context=response.get("assembled_context", ""),
-            memories=response.get("memories", []),
+            memories=response.get("facts", []) + response.get("procedures", []),
         )
 
     def timeline(self) -> dict[str, Any]:

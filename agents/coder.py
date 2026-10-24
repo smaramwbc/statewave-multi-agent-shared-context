@@ -59,7 +59,7 @@ class CoderAgent(Agent):
             for mem in context.memories:
                 agent_log(
                     self.name,
-                    f"  [{mem.get('type', 'memory')}] (confidence {mem.get('confidence', 0):.2f}) "
+                    f"  [{mem.get('kind', 'memory')}] (confidence {mem.get('confidence', 0):.2f}) "
                     f"{mem.get('content', '')[:120]}",
                     style="dim cyan",
                 )

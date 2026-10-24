@@ -22,6 +22,9 @@ jobs:
       - name: Syntax check all Python files
         run: find . -name "*.py" -not -path "./.venv/*" -exec python -m py_compile {} +
 
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
       - name: Check links in markdown
         uses: lycheeverse/lychee-action@v2
         with:
