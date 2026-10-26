@@ -16,6 +16,15 @@ from typing import Any
 from core.statewave_client import StatewaveClient
 
 
+def reads_subject_id(subject_id: str) -> str:
+    """Subject that holds the `context_retrieval` audit records for `subject_id`.
+
+    Kept separate so the records never compile into the shared subject's
+    memory or show up in another agent's assembled context.
+    """
+    return f"{subject_id}:reads"
+
+
 @dataclass
 class Decision:
     """A single decision published to the shared subject."""
@@ -56,6 +65,7 @@ class SharedContext:
         auto_compile: bool = True,
     ):
         self.subject_id = subject_id
+        self.reads_subject_id = reads_subject_id(subject_id)
         self._client = client or StatewaveClient()
         self._auto_compile = auto_compile
 
@@ -107,10 +117,31 @@ class SharedContext:
             task=task,
             top_k=top_k,
         )
-        return ContextBundle(
+        bundle = ContextBundle(
             assembled_context=response.get("assembled_context", ""),
             memories=response.get("memories", []),
         )
+        # Record what was retrieved for timeline_inspector. Never compiled.
+        summary = f"Retrieved {len(bundle.memories)} memories"
+        if any(m.get("content", "").startswith("Deprecation") for m in bundle.memories):
+            summary += " (incl. deprecation)"
+        self._client.write_episode(
+            subject_id=self.reads_subject_id,
+            caller_id=caller_id,
+            content=summary,
+            episode_type="context_retrieval",
+            metadata={
+                "retrieved_memories": [
+                    {
+                        "type": m.get("kind") or m.get("type", "?"),
+                        "confidence": m.get("confidence") or 0,
+                        "content": m.get("content", ""),
+                    }
+                    for m in bundle.memories
+                ]
+            },
+        )
+        return bundle
 
     def timeline(self) -> dict[str, Any]:
         """The full chronological audit trail for this subject."""

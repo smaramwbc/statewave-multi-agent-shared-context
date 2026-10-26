@@ -21,6 +21,7 @@ from rich import box
 
 from core.statewave_client import StatewaveClient
 from core.display import header, divider, info, error
+from statewave_agents.context import reads_subject_id
 
 console = Console()
 
@@ -52,11 +53,12 @@ def print_timeline(run_id: str, sw_client: StatewaveClient) -> None:
 
     try:
         data = sw_client.get_timeline(run_id)
+        reads = sw_client.get_timeline(reads_subject_id(run_id))
     except Exception as exc:
         error(f"Failed to fetch timeline for run '{run_id}': {exc}")
         sys.exit(1)
 
-    events = data.get("events", [])
+    events = data.get("events", []) + reads.get("events", [])
     memories = data.get("memories", [])
 
     if not events:
